@@ -159,8 +159,8 @@ package ariane_pkg;
 
 `ifdef PITON_ARIANE
     // Floating-point extensions configuration
-    localparam bit RVF = riscv::IS_XLEN64; // Is F extension enabled
-    localparam bit RVD = riscv::IS_XLEN64; // Is D extension enabled
+    localparam bit RVF = riscv::FPU_EN; // Is F extension enabled
+    localparam bit RVD = riscv::FPU_EN; // Is D extension enabled
 `else
     // Floating-point extensions configuration
     localparam bit RVF = (riscv::IS_XLEN64 | riscv::IS_XLEN32) & riscv::FPU_EN; // Is F extension enabled for both 32 Bit and 64 bit CPU
@@ -186,7 +186,7 @@ package ariane_pkg;
 
     // --------------------------------------
     // vvvv Don't change these by hand! vvvv
-    localparam bit FP_PRESENT = RVF | RVD | XF16 | XF16ALT | XF8;
+    localparam bit FP_PRESENT = 1'b0;
 
     // Length of widest floating-point format
     localparam FLEN    = RVD     ? 64 : // D ext.

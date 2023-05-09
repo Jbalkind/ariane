@@ -12,11 +12,6 @@
 // Date: 15.08.2018
 // Description: Ariane cache subsystem that is compatible with the OpenPiton
 //              coherent memory system.
-//
-//              Define PITON_ARIANE if you want to use this cache.
-//              Define DCACHE_TYPE if you want to use this cache
-//              with a standard 64 bit AXI interface instead of the OpenPiton
-//              L1.5 interface.
 
 
 module wt_cache_subsystem import ariane_pkg::*; import wt_cache_pkg::*; #(
@@ -57,15 +52,12 @@ module wt_cache_subsystem import ariane_pkg::*; import wt_cache_pkg::*; #(
   // writebuffer status
   output logic                           wbuffer_empty_o,
   output logic                           wbuffer_not_ni_o,
-`ifdef PITON_ARIANE
   // L15 (memory side)
   output l15_req_t                       l15_req_o,
-  input  l15_rtrn_t                      l15_rtrn_i
-`else
+  input  l15_rtrn_t                      l15_rtrn_i,
   // memory side
   output axi_req_t                       axi_req_o,
   input  axi_rsp_t                       axi_resp_i
-`endif
   // TODO: interrupt interface
 );
 
@@ -137,7 +129,7 @@ module wt_cache_subsystem import ariane_pkg::*; import wt_cache_pkg::*; #(
 // L15 cache interface (derived from OpenSPARC CCX).
 ///////////////////////////////////////////////////////
 
-`ifdef PITON_ARIANE
+if (ArianeCfg.AxiCompliant) begin
   wt_l15_adapter #(
     .SwapEndianess   ( ArianeCfg.SwapEndianess )
   ) i_adapter (
@@ -156,7 +148,7 @@ module wt_cache_subsystem import ariane_pkg::*; import wt_cache_pkg::*; #(
     .l15_req_o          ( l15_req_o               ),
     .l15_rtrn_i         ( l15_rtrn_i              )
   );
-`else
+end else begin
   wt_axi_adapter #(
     .AxiAddrWidth       ( AxiAddrWidth ),
     .AxiDataWidth       ( AxiDataWidth ),
@@ -179,7 +171,7 @@ module wt_cache_subsystem import ariane_pkg::*; import wt_cache_pkg::*; #(
     .axi_req_o          ( axi_req_o               ),
     .axi_resp_i         ( axi_resp_i              )
   );
-`endif
+end
 
 ///////////////////////////////////////////////////////
 // assertions

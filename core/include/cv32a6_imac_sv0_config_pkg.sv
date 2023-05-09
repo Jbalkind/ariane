@@ -50,6 +50,9 @@ package cva6_config_pkg;
 
     localparam CVA6ConfigWtDcacheWbufDepth = 8;
 
+    localparam CVA6ConfigL15Associativity = CVA6ConfigDcacheSetAssoc;
+    localparam CVA6ConfigL15TLBCSMWidth = 33;
+
     localparam CVA6ConfigNrCommitPorts = 2;
     localparam CVA6ConfigNrScoreboardEntries = 8;
 

@@ -1149,11 +1149,7 @@ module csr_regfile import ariane_pkg::*; #(
     assign tw_o             = mstatus_q.tw;
     assign tsr_o            = mstatus_q.tsr;
     assign halt_csr_o       = wfi_q;
-`ifdef PITON_ARIANE
-    assign icache_en_o      = icache_q[0];
-`else
     assign icache_en_o      = icache_q[0] & (~debug_mode_q);
-`endif
     assign dcache_en_o      = dcache_q[0];
 
     // determine if mprv needs to be considered if in debug mode

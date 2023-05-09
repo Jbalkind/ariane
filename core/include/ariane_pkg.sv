@@ -16,13 +16,6 @@
  *              in one package.
  */
 
-// this is needed to propagate the
-// configuration in case Ariane is
-// instantiated in OpenPiton
-`ifdef PITON_ARIANE
-  `include "l15.tmp.h"
-`endif
-
 package ariane_pkg;
 
     // ---------------
@@ -155,15 +148,9 @@ package ariane_pkg;
 
     localparam bit RVC = cva6_config_pkg::CVA6ConfigCExtEn; // Is C extension configuration
 
-`ifdef PITON_ARIANE
-    // Floating-point extensions configuration
-    localparam bit RVF = riscv::IS_XLEN64; // Is F extension enabled
-    localparam bit RVD = riscv::IS_XLEN64; // Is D extension enabled
-`else
     // Floating-point extensions configuration
     localparam bit RVF = (riscv::IS_XLEN64 | riscv::IS_XLEN32) & riscv::FPU_EN; // Is F extension enabled for both 32 Bit and 64 bit CPU
     localparam bit RVD = (riscv::IS_XLEN64 ? 1:0) & riscv::FPU_EN;              // Is D extension enabled for only 64 bit CPU
-`endif
     localparam bit RVA = cva6_config_pkg::CVA6ConfigAExtEn; // Is A extension enabled
 
     // Transprecision floating-point extensions configuration
@@ -413,53 +400,6 @@ package ariane_pkg;
     // Cache config
     // ---------------
 
-// for usage in OpenPiton we have to propagate the openpiton L15 configuration from l15.h
-`ifdef PITON_ARIANE
-
-`ifndef CONFIG_L1I_CACHELINE_WIDTH
-    `define CONFIG_L1I_CACHELINE_WIDTH 128
-`endif
-
-`ifndef CONFIG_L1I_ASSOCIATIVITY
-    `define CONFIG_L1I_ASSOCIATIVITY 4
-`endif
-
-`ifndef CONFIG_L1I_SIZE
-    `define CONFIG_L1I_SIZE 16*1024
-`endif
-
-`ifndef CONFIG_L1D_CACHELINE_WIDTH
-    `define CONFIG_L1D_CACHELINE_WIDTH 128
-`endif
-
-`ifndef CONFIG_L1D_ASSOCIATIVITY
-    `define CONFIG_L1D_ASSOCIATIVITY 8
-`endif
-
-`ifndef CONFIG_L1D_SIZE
-    `define CONFIG_L1D_SIZE 32*1024
-`endif
-
-`ifndef L15_THREADID_WIDTH
-    `define L15_THREADID_WIDTH 3
-`endif
-
-    // I$
-    localparam int unsigned ICACHE_LINE_WIDTH  = `CONFIG_L1I_CACHELINE_WIDTH;
-    localparam int unsigned ICACHE_SET_ASSOC   = `CONFIG_L1I_ASSOCIATIVITY;
-    localparam int unsigned ICACHE_INDEX_WIDTH = $clog2(`CONFIG_L1I_SIZE / ICACHE_SET_ASSOC);
-    localparam int unsigned ICACHE_TAG_WIDTH   = riscv::PLEN - ICACHE_INDEX_WIDTH;
-    localparam int unsigned ICACHE_USER_LINE_WIDTH  = (AXI_USER_WIDTH == 1) ? 4 : 128; // in bit
-    // D$
-    localparam int unsigned DCACHE_LINE_WIDTH  = `CONFIG_L1D_CACHELINE_WIDTH;
-    localparam int unsigned DCACHE_SET_ASSOC   = `CONFIG_L1D_ASSOCIATIVITY;
-    localparam int unsigned DCACHE_INDEX_WIDTH = $clog2(`CONFIG_L1D_SIZE / DCACHE_SET_ASSOC);
-    localparam int unsigned DCACHE_TAG_WIDTH   = riscv::PLEN - DCACHE_INDEX_WIDTH;
-    localparam int unsigned DCACHE_USER_LINE_WIDTH  = (AXI_USER_WIDTH == 1) ? 4 : 128; // in bit
-    localparam int unsigned DCACHE_USER_WIDTH  = DATA_USER_WIDTH;
-
-    localparam int unsigned MEM_TID_WIDTH      = `L15_THREADID_WIDTH;
-`else
     // I$
     localparam int unsigned CONFIG_L1I_SIZE    = cva6_config_pkg::CVA6ConfigIcacheByteSize; // in byte
     localparam int unsigned ICACHE_SET_ASSOC   = cva6_config_pkg::CVA6ConfigIcacheSetAssoc; // number of ways
@@ -477,11 +417,13 @@ package ariane_pkg;
     localparam int unsigned DCACHE_USER_WIDTH  = DATA_USER_WIDTH;
 
     localparam int unsigned MEM_TID_WIDTH      = cva6_config_pkg::CVA6ConfigMemTidWidth;
-`endif
 
     localparam int unsigned DCACHE_TID_WIDTH   = cva6_config_pkg::CVA6ConfigDcacheIdWidth;
 
     localparam int unsigned WT_DCACHE_WBUF_DEPTH   = cva6_config_pkg::CVA6ConfigWtDcacheWbufDepth;
+
+    localparam int unsigned L15_SET_ASSOC      = cva6_config_pkg::CVA6ConfigL15Associativity;
+    localparam int unsigned L15_TLB_CSM_WIDTH  = cva6_config_pkg::CVA6ConfigL15TLBCSMWidth;
 
     // ---------------
     // EX Stage

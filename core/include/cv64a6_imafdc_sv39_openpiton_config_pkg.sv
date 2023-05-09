@@ -7,6 +7,49 @@
 //
 // Original Author: Jean-Roch COULON - Thales
 
+// this is needed to propagate the
+// configuration in case Ariane is
+// instantiated in OpenPiton
+`ifdef PITON_ARIANE
+  `include "l15.tmp.h"
+  `include "define.tmp.h"
+`endif
+
+`ifndef CONFIG_L1I_CACHELINE_WIDTH
+    `define CONFIG_L1I_CACHELINE_WIDTH 128
+`endif
+
+`ifndef CONFIG_L1I_ASSOCIATIVITY
+    `define CONFIG_L1I_ASSOCIATIVITY 4
+`endif
+
+`ifndef CONFIG_L1I_SIZE
+    `define CONFIG_L1I_SIZE 16*1024
+`endif
+
+`ifndef CONFIG_L1D_CACHELINE_WIDTH
+    `define CONFIG_L1D_CACHELINE_WIDTH 128
+`endif
+
+`ifndef CONFIG_L1D_ASSOCIATIVITY
+    `define CONFIG_L1D_ASSOCIATIVITY 8
+`endif
+
+`ifndef CONFIG_L1D_SIZE
+    `define CONFIG_L1D_SIZE 32*1024
+`endif
+
+`ifndef L15_THREADID_WIDTH
+    `define L15_THREADID_WIDTH 3
+`endif
+
+`ifndef CONFIG_L15_ASSOCIATIVITY
+    `define CONFIG_L15_ASSOCIATIVITY 4
+`endif
+
+`ifndef TLB_CSM_WIDTH
+    `define TLB_CSM_WIDTH 33
+`endif
 
 package cva6_config_pkg;
 
@@ -38,17 +81,20 @@ package cva6_config_pkg;
 
     localparam CVA6ConfigRenameEn = 0;
 
-    localparam CVA6ConfigIcacheByteSize = 16384;
-    localparam CVA6ConfigIcacheSetAssoc = 4;
-    localparam CVA6ConfigIcacheLineWidth = 128;
-    localparam CVA6ConfigDcacheByteSize = 32768;
-    localparam CVA6ConfigDcacheSetAssoc = 8;
-    localparam CVA6ConfigDcacheLineWidth = 128;
+    localparam CVA6ConfigIcacheByteSize = `CONFIG_L1I_SIZE;
+    localparam CVA6ConfigIcacheSetAssoc = `CONFIG_L1I_ASSOCIATIVITY;
+    localparam CVA6ConfigIcacheLineWidth = `CONFIG_L1I_CACHELINE_WIDTH;
+    localparam CVA6ConfigDcacheByteSize = `CONFIG_L1D_SIZE;
+    localparam CVA6ConfigDcacheSetAssoc = `CONFIG_L1D_ASSOCIATIVITY;
+    localparam CVA6ConfigDcacheLineWidth = `CONFIG_L1D_CACHELINE_WIDTH;
 
     localparam CVA6ConfigDcacheIdWidth = 1;
-    localparam CVA6ConfigMemTidWidth = 2;
+    localparam CVA6ConfigMemTidWidth = `L15_THREADID_WIDTH;
 
     localparam CVA6ConfigWtDcacheWbufDepth = 8;
+
+    localparam CVA6ConfigL15Associativity = `CONFIG_L15_ASSOCIATIVITY;
+    localparam CVA6ConfigL15TLBCSMWidth = `TLB_CSM_WIDTH;
 
     localparam CVA6ConfigNrCommitPorts = 2;
     localparam CVA6ConfigNrScoreboardEntries = 8;

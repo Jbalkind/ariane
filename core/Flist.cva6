@@ -71,6 +71,7 @@ ${CVA6_REPO_DIR}/vendor/pulp-platform/common_cells/src/shift_reg.sv
 ${CVA6_REPO_DIR}/vendor/pulp-platform/common_cells/src/unread.sv
 ${CVA6_REPO_DIR}/vendor/pulp-platform/common_cells/src/popcount.sv
 ${CVA6_REPO_DIR}/vendor/pulp-platform/common_cells/src/exp_backoff.sv
+${CVA6_REPO_DIR}/vendor/pulp-platform/common_cells/src/deprecated/rrarbiter.sv
 
 // Common Cells for example coprocessor
 ${CVA6_REPO_DIR}/vendor/pulp-platform/common_cells/src/counter.sv
@@ -148,6 +149,7 @@ ${CVA6_REPO_DIR}/core/cache_subsystem/wt_dcache.sv
 ${CVA6_REPO_DIR}/core/cache_subsystem/cva6_icache.sv
 ${CVA6_REPO_DIR}/core/cache_subsystem/wt_cache_subsystem.sv
 ${CVA6_REPO_DIR}/core/cache_subsystem/wt_axi_adapter.sv
+${CVA6_REPO_DIR}/core/cache_subsystem/wt_l15_adapter.sv
 ${CVA6_REPO_DIR}/core/cache_subsystem/tag_cmp.sv
 ${CVA6_REPO_DIR}/core/cache_subsystem/axi_adapter.sv
 ${CVA6_REPO_DIR}/core/cache_subsystem/miss_handler.sv

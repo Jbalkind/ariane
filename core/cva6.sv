@@ -716,14 +716,11 @@ module cva6 import ariane_pkg::*; #(
     // write buffer status
     .wbuffer_empty_o       ( dcache_commit_wbuffer_empty ),
     .wbuffer_not_ni_o      ( dcache_commit_wbuffer_not_ni ),
-`ifdef PITON_ARIANE
     .l15_req_o             ( l15_req_o                   ),
-    .l15_rtrn_i            ( l15_rtrn_i                  )
-`else
+    .l15_rtrn_i            ( l15_rtrn_i                  ),
     // memory side
     .axi_req_o             ( axi_req_o                   ),
     .axi_resp_i            ( axi_resp_i                  )
-`endif
   );
   end else begin
 
@@ -787,7 +784,7 @@ module cva6 import ariane_pkg::*; #(
   // -------------------
 
   //pragma translate_off
-`ifdef PITON_ARIANE
+if (~ArianeCfg.AxiCompliant) begin
   localparam PC_QUEUE_DEPTH = 16;
 
   logic        piton_pc_vld;
@@ -830,7 +827,7 @@ module cva6 import ariane_pkg::*; #(
     .data_o  ( piton_pc     ),
     .idx_o   (              )
   );
-`endif // PITON_ARIANE
+end
 
 `ifndef VERILATOR
   instr_tracer_if tracer_if (clk_i);

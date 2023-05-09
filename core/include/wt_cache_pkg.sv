@@ -12,34 +12,12 @@
 // Date: 15.08.2018
 // Description: Package for OpenPiton compatible L1 cache subsystem
 
-// this is needed to propagate the
-// configuration in case Ariane is
-// instantiated in OpenPiton
-`ifdef PITON_ARIANE
-  `include "l15.tmp.h"
-  `include "define.tmp.h"
-`endif
-
 package wt_cache_pkg;
 
   // these parames need to coincide with the
   // L1.5 parameterization, do not change
-`ifdef PITON_ARIANE
-
-`ifndef CONFIG_L15_ASSOCIATIVITY
-    `define CONFIG_L15_ASSOCIATIVITY 4
-`endif
-
-`ifndef TLB_CSM_WIDTH
-    `define TLB_CSM_WIDTH 33
-`endif
-
-  localparam L15_SET_ASSOC           = `CONFIG_L15_ASSOCIATIVITY;
-  localparam L15_TLB_CSM_WIDTH       = `TLB_CSM_WIDTH;
-`else
   localparam L15_SET_ASSOC           = ariane_pkg::DCACHE_SET_ASSOC;// align with dcache for compatibility with the standard Ariane setup
   localparam L15_TLB_CSM_WIDTH       = 33;
-`endif
   localparam L15_TID_WIDTH           = ariane_pkg::MEM_TID_WIDTH;
   localparam L15_WAY_WIDTH           = $clog2(L15_SET_ASSOC);
   localparam L1I_WAY_WIDTH           = $clog2(ariane_pkg::ICACHE_SET_ASSOC);

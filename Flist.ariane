@@ -108,7 +108,6 @@ core/cache_subsystem/wt_dcache_wbuffer.sv
 core/cache_subsystem/wt_dcache.sv
 core/cache_subsystem/cva6_icache.sv
 core/cache_subsystem/cva6_icache_axi_wrapper.sv
-core/cache_subsystem/wt_l15_types.sv
 core/cache_subsystem/wt_l15_adapter.sv
 core/cache_subsystem/wt_cache_subsystem.sv
 corev_apu/clint/clint.sv

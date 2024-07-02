@@ -39,10 +39,6 @@ package wt_cache_pkg;
 `else
   localparam L15_TLB_CSM_WIDTH = 33;
 `endif
-  localparam L15_TID_WIDTH = ariane_pkg::MEM_TID_WIDTH;
-  localparam L15_WAY_WIDTH = $clog2(L15_SET_ASSOC);
-  localparam L1I_WAY_WIDTH = $clog2(ariane_pkg::ICACHE_SET_ASSOC);
-  localparam L1D_WAY_WIDTH = $clog2(ariane_pkg::DCACHE_SET_ASSOC);
 
   // FIFO depths of L15 adapter
   localparam ADAPTER_REQ_FIFO_DEPTH = 2;

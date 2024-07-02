@@ -16,7 +16,6 @@
 module ariane_verilog_wrap
     import ariane_pkg::*;
     import config_pkg::*;
-    import wt_l15_types::*;
 #(
   parameter int unsigned               RASDepth              = 2,
   parameter int unsigned               BTBEntries            = 32,
@@ -91,8 +90,8 @@ module ariane_verilog_wrap
   parameter logic [NrMaxRules*64-1:0]  CachedRegionLength    = '0,
   // PMP
   parameter int unsigned               NrPMPEntries          =  8,
-  parameter type l15_req_t = wt_l15_types::l15_req_t,
-  parameter type l15_rtrn_t = wt_l15_types::l15_rtrn_t
+  parameter type                       l15_req_t             = logic,
+  parameter type                       l15_rtrn_t            = logic
 ) (
   input                       clk_i,
   input                       reset_l,      // this is an openpiton-specific name, do not change (hier. paths in TB use this)
@@ -254,14 +253,14 @@ module ariane_verilog_wrap
     MaxOutstandingStores:   MaxOutstandingStores,
     DebugEn:                DebugEn,
     AxiBurstWriteEn:        AxiBurstWriteEn,
-    MemTidWidth:            2,
+    MemTidWidth:            1,
     RVZCMP:                 ZcmpExtEn,
     NrScoreboardEntries:    8,
     IcacheByteSize:         16384,
     IcacheSetAssoc:         4,
     IcacheLineWidth:        256,
     DcacheByteSize:         32768,
-    DcacheSetAssoc:         8,
+    DcacheSetAssoc:         4,
     DcacheLineWidth:        128,
     DataUserEn:             1'b0,
     WtDcacheWbufDepth:      8,
@@ -290,18 +289,9 @@ module ariane_verilog_wrap
   };
 
   localparam cva6_cfg_t cva6_cfg = build_config_pkg::build_config(cva6_user_cfg);
-  localparam type rvfi_probes_instr_t = `RVFI_PROBES_INSTR_T(cva6_cfg);
-  localparam type rvfi_probes_csr_t = `RVFI_PROBES_CSR_T(cva6_cfg);
-  localparam type rvfi_probes_t = struct packed {
-    rvfi_probes_csr_t csr;
-    rvfi_probes_instr_t instr;
-  };
 
   ariane #(
     .CVA6Cfg    ( cva6_cfg ),
-    .rvfi_probes_instr_t ( rvfi_probes_instr_t ),
-    .rvfi_probes_csr_t ( rvfi_probes_csr_t ),
-    .rvfi_probes_t ( rvfi_probes_t ),
     .noc_req_t  ( l15_req_t  ),
     .noc_resp_t ( l15_rtrn_t )
   ) ariane (

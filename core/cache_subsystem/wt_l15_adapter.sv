@@ -48,19 +48,19 @@
 //           https://parallel.princeton.edu/openpiton/docs/micro_arch.pdf
 //
 
+`include "wt_l15_types.svh"
 
 module wt_l15_adapter
   import ariane_pkg::*;
   import wt_cache_pkg::*;
-  import wt_l15_types::*;
 #(
     parameter config_pkg::cva6_cfg_t CVA6Cfg = config_pkg::cva6_cfg_empty,
     parameter type icache_req_t = logic,
     parameter type icache_rtrn_t = logic,
     parameter type dcache_req_t = logic,
     parameter type dcache_rtrn_t = logic,
-    parameter type l15_req_t = wt_l15_types::l15_req_t,
-    parameter type l15_rtrn_t = wt_l15_types::l15_rtrn_t
+    parameter type l15_req_t = `L15_REQ_T(CVA6Cfg),
+    parameter type l15_rtrn_t = `L15_RTRN_T(CVA6Cfg)
 ) (
     input logic clk_i,
     input logic rst_ni,
@@ -82,7 +82,7 @@ module wt_l15_adapter
     output dcache_rtrn_t dcache_rtrn_o,
 
     // L15
-    output l15_req_t  l15_req_o,
+    output l15_req_t l15_req_o,
     input  l15_rtrn_t l15_rtrn_i
 );
 

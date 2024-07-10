@@ -354,29 +354,29 @@ module cva6
   // --------------
   // IF <-> ID
   // --------------
-  fetch_entry_t [ariane_pkg::SUPERSCALAR:0] fetch_entry_if_id;
-  logic [ariane_pkg::SUPERSCALAR:0] fetch_valid_if_id;
-  logic [ariane_pkg::SUPERSCALAR:0] fetch_ready_id_if;
+  fetch_entry_t [CVA6Cfg.NrIssuePorts-1:0] fetch_entry_if_id;
+  logic [CVA6Cfg.NrIssuePorts-1:0] fetch_valid_if_id;
+  logic [CVA6Cfg.NrIssuePorts-1:0] fetch_ready_id_if;
 
   // --------------
   // ID <-> ISSUE
   // --------------
-  scoreboard_entry_t [ariane_pkg::SUPERSCALAR:0] issue_entry_id_issue;
-  logic [ariane_pkg::SUPERSCALAR:0][31:0] orig_instr_id_issue;
-  logic [ariane_pkg::SUPERSCALAR:0] issue_entry_valid_id_issue;
-  logic [ariane_pkg::SUPERSCALAR:0] is_ctrl_fow_id_issue;
-  logic [ariane_pkg::SUPERSCALAR:0] issue_instr_issue_id;
+  scoreboard_entry_t [CVA6Cfg.NrIssuePorts-1:0] issue_entry_id_issue;
+  logic [CVA6Cfg.NrIssuePorts-1:0][31:0] orig_instr_id_issue;
+  logic [CVA6Cfg.NrIssuePorts-1:0] issue_entry_valid_id_issue;
+  logic [CVA6Cfg.NrIssuePorts-1:0] is_ctrl_fow_id_issue;
+  logic [CVA6Cfg.NrIssuePorts-1:0] issue_instr_issue_id;
 
   // --------------
   // ISSUE <-> EX
   // --------------
-  logic [SUPERSCALAR:0][CVA6Cfg.VLEN-1:0] rs1_forwarding_id_ex;  // unregistered version of fu_data_o.operanda
-  logic [SUPERSCALAR:0][CVA6Cfg.VLEN-1:0] rs2_forwarding_id_ex;  // unregistered version of fu_data_o.operandb
+  logic [CVA6Cfg.NrIssuePorts-1:0][CVA6Cfg.VLEN-1:0] rs1_forwarding_id_ex;  // unregistered version of fu_data_o.operanda
+  logic [CVA6Cfg.NrIssuePorts-1:0][CVA6Cfg.VLEN-1:0] rs2_forwarding_id_ex;  // unregistered version of fu_data_o.operandb
 
-  fu_data_t [SUPERSCALAR:0] fu_data_id_ex;
+  fu_data_t [CVA6Cfg.NrIssuePorts-1:0] fu_data_id_ex;
   logic [CVA6Cfg.VLEN-1:0] pc_id_ex;
   logic is_compressed_instr_id_ex;
-  logic [SUPERSCALAR:0][31:0] tinst_ex;
+  logic [CVA6Cfg.NrIssuePorts-1:0][31:0] tinst_ex;
   // fixed latency units
   logic flu_ready_ex_id;
   logic [CVA6Cfg.TRANS_ID_BITS-1:0] flu_trans_id_ex_id;
@@ -384,14 +384,14 @@ module cva6
   logic [CVA6Cfg.XLEN-1:0] flu_result_ex_id;
   exception_t flu_exception_ex_id;
   // ALU
-  logic [SUPERSCALAR:0] alu_valid_id_ex;
+  logic [CVA6Cfg.NrIssuePorts-1:0] alu_valid_id_ex;
   // Branches and Jumps
-  logic [SUPERSCALAR:0] branch_valid_id_ex;
+  logic [CVA6Cfg.NrIssuePorts-1:0] branch_valid_id_ex;
 
   branchpredict_sbe_t branch_predict_id_ex;
   logic resolve_branch_ex_id;
   // LSU
-  logic [SUPERSCALAR:0] lsu_valid_id_ex;
+  logic [CVA6Cfg.NrIssuePorts-1:0] lsu_valid_id_ex;
   logic lsu_ready_ex_id;
 
   logic [CVA6Cfg.TRANS_ID_BITS-1:0] load_trans_id_ex_id;
@@ -404,16 +404,18 @@ module cva6
   logic store_valid_ex_id;
   exception_t store_exception_ex_id;
   // MULT
-  logic [SUPERSCALAR:0] mult_valid_id_ex;
+  logic [CVA6Cfg.NrIssuePorts-1:0] mult_valid_id_ex;
   // FPU
   logic fpu_ready_ex_id;
-  logic [SUPERSCALAR:0] fpu_valid_id_ex;
+  logic [CVA6Cfg.NrIssuePorts-1:0] fpu_valid_id_ex;
   logic [1:0] fpu_fmt_id_ex;
   logic [2:0] fpu_rm_id_ex;
   logic [CVA6Cfg.TRANS_ID_BITS-1:0] fpu_trans_id_ex_id;
   logic [CVA6Cfg.XLEN-1:0] fpu_result_ex_id;
   logic fpu_valid_ex_id;
   exception_t fpu_exception_ex_id;
+  // ALU2
+  logic [CVA6Cfg.NrIssuePorts-1:0] alu2_valid_id_ex;
   // Accelerator
   logic stall_acc_id;
   scoreboard_entry_t issue_instr_id_acc;
@@ -427,7 +429,7 @@ module cva6
   logic acc_resp_fflags_valid;
   logic single_step_acc_commit;
   // CSR
-  logic [SUPERSCALAR:0] csr_valid_id_ex;
+  logic [CVA6Cfg.NrIssuePorts-1:0] csr_valid_id_ex;
   logic csr_hs_ld_st_inst_ex;
   // CVXIF
   logic [CVA6Cfg.TRANS_ID_BITS-1:0] x_trans_id_ex_id;
@@ -435,7 +437,7 @@ module cva6
   logic x_valid_ex_id;
   exception_t x_exception_ex_id;
   logic x_we_ex_id;
-  logic [SUPERSCALAR:0] x_issue_valid_id_ex;
+  logic [CVA6Cfg.NrIssuePorts-1:0] x_issue_valid_id_ex;
   logic x_issue_ready_ex_id;
   logic [31:0] x_off_instr_id_ex;
   // --------------
@@ -465,7 +467,7 @@ module cva6
   // --------------
   // RVFI
   // --------------
-  logic [ariane_pkg::SUPERSCALAR:0][CVA6Cfg.TRANS_ID_BITS-1:0] rvfi_issue_pointer;
+  logic [CVA6Cfg.NrIssuePorts-1:0][CVA6Cfg.TRANS_ID_BITS-1:0] rvfi_issue_pointer;
   logic [CVA6Cfg.NrCommitPorts-1:0][CVA6Cfg.TRANS_ID_BITS-1:0] rvfi_commit_pointer;
   // --------------
   // COMMIT <-> ID
@@ -516,8 +518,8 @@ module cva6
   logic acc_cons_en_csr;
   logic debug_mode;
   logic single_step_csr_commit;
-  riscv::pmpcfg_t [15:0] pmpcfg;
-  logic [15:0][CVA6Cfg.PLEN-3:0] pmpaddr;
+  riscv::pmpcfg_t [CVA6Cfg.NrPMPEntries:0] pmpcfg;
+  logic [CVA6Cfg.NrPMPEntries:0][CVA6Cfg.PLEN-3:0] pmpaddr;
   logic [31:0] mcountinhibit_csr_perf;
   // ----------------------------
   // Performance Counters <-> *
@@ -581,7 +583,7 @@ module cva6
   //RVFI
   lsu_ctrl_t rvfi_lsu_ctrl;
   logic [CVA6Cfg.PLEN-1:0] rvfi_mem_paddr;
-  logic [ariane_pkg::SUPERSCALAR:0] rvfi_is_compressed;
+  logic [CVA6Cfg.NrIssuePorts-1:0] rvfi_is_compressed;
   rvfi_probes_csr_t rvfi_csr;
 
   // Accelerator port
@@ -755,6 +757,8 @@ module cva6
       .fpu_valid_o           (fpu_valid_id_ex),
       .fpu_fmt_o             (fpu_fmt_id_ex),
       .fpu_rm_o              (fpu_rm_id_ex),
+      // ALU2
+      .alu2_valid_o          (alu2_valid_id_ex),
       // CSR
       .csr_valid_o           (csr_valid_id_ex),
       // CVXIF
@@ -864,6 +868,8 @@ module cva6
       .fpu_result_o            (fpu_result_ex_id),
       .fpu_valid_o             (fpu_valid_ex_id),
       .fpu_exception_o         (fpu_exception_ex_id),
+      // ALU2
+      .alu2_valid_i            (alu2_valid_id_ex),
       .amo_valid_commit_i      (amo_valid_commit),
       .amo_req_o               (amo_req),
       .amo_resp_i              (amo_resp),
@@ -1585,8 +1591,8 @@ module cva6
 
 
   //RVFI INSTR
-  logic [ariane_pkg::SUPERSCALAR:0][31:0] rvfi_fetch_instr;
-  for (genvar i = 0; i <= ariane_pkg::SUPERSCALAR; i++) begin
+  logic [CVA6Cfg.NrIssuePorts-1:0][31:0] rvfi_fetch_instr;
+  for (genvar i = 0; i < CVA6Cfg.NrIssuePorts; i++) begin
     assign rvfi_fetch_instr[i] = fetch_entry_if_id[i].instruction;
   end
 
@@ -1636,7 +1642,7 @@ module cva6
 
   //pragma translate_off
   initial begin
-    assert (!(ariane_pkg::SUPERSCALAR && CVA6Cfg.EnableAccelerator))
+    assert (!(CVA6Cfg.SuperscalarEn && CVA6Cfg.EnableAccelerator))
     else $fatal(1, "Accelerator is not supported by superscalar pipeline");
   end
   //pragma translate_on

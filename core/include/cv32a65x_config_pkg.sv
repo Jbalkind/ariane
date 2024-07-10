@@ -18,14 +18,13 @@ package cva6_config_pkg;
   localparam CVA6ConfigAxiDataWidth = 64;  // axi_pkg.sv
   localparam CVA6ConfigDataUserWidth = 32;  // axi_pkg.sv
 
-  localparam CVA6ConfigSuperscalarEn = 0;  // superscalar
-
   localparam CVA6ConfigNrScoreboardEntries = 4;  // cvxif_pkg.sv
 
   localparam config_pkg::cva6_user_cfg_t cva6_cfg = '{
       XLEN: unsigned'(CVA6ConfigXlen),
       FpgaEn: bit'(0),
       TechnoCut: bit'(1),
+      SuperscalarEn: bit'(0),
       NrCommitPorts: unsigned'(1),
       AxiAddrWidth: unsigned'(CVA6ConfigAxiAddrWidth),
       AxiDataWidth: unsigned'(CVA6ConfigAxiDataWidth),
@@ -64,9 +63,9 @@ package cva6_config_pkg;
       TvalEn: bit'(0),
       DirectVecOnly: bit'(1),
       NrPMPEntries: unsigned'(8),
-      PMPCfgRstVal: {16{64'h0}},
-      PMPAddrRstVal: {16{64'h0}},
-      PMPEntryReadOnly: 16'd0,
+      PMPCfgRstVal: {64{64'h0}},
+      PMPAddrRstVal: {64{64'h0}},
+      PMPEntryReadOnly: 64'd0,
       NOCType: config_pkg::NOC_TYPE_AXI4_ATOP,
       NrNonIdempotentRules: unsigned'(2),
       NonIdempotentAddrBase: 1024'({64'b0, 64'b0}),

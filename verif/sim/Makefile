@@ -164,7 +164,7 @@ export DV_UVMA_ISACOV_PATH    = $(CORE_V_VERIF)/lib/uvm_agents/uvma_isacov
 export DV_UVMA_CLKNRST_PATH   = $(CORE_V_VERIF)/lib/uvm_agents/uvma_clknrst
 export DV_UVMA_CVXIF_PATH     = $(CORE_V_VERIF)/lib/uvm_agents/uvma_cvxif
 export DV_UVMA_AXI_PATH       = $(CORE_V_VERIF)/lib/uvm_agents/uvma_axi5
-export DV_UVMA_INTERRUPT_PATH = $(CORE_V_VERIF)/lib/uvm_agents/uvma_interrupt
+export DV_UVMA_INTERRUPT_PATH = $(DV_UVME_PATH)/uvma_interrupt
 export DV_UVMA_DEBUG_PATH     = $(CORE_V_VERIF)/lib/uvm_agents/uvma_debug
 export DV_UVMA_OBI_PATH       = $(CORE_V_VERIF)/lib/uvm_agents/uvma_obi
 export DV_UVMC_RVFI_SCOREBOARD_PATH      = $(CORE_V_VERIF)/lib/uvm_components/uvmc_rvfi_scoreboard/
@@ -257,11 +257,11 @@ ifneq ($(DEBUG),)               # If RTL DEBUG support requested
 endif
 
 ifneq ($(SPIKE_TANDEM),)
-ALL_SIMV_UVM_FLAGS += +scoreboard_enabled=1
-ALL_XRUN_SIMV_UVM_FLAGS += +scoreboard_enabled=1
+ALL_SIMV_UVM_FLAGS += +tandem_enabled=1
+ALL_XRUN_SIMV_UVM_FLAGS += +tandem_enabled=1
 else
-ALL_SIMV_UVM_FLAGS += +scoreboard_enabled=0
-ALL_XRUN_SIMV_UVM_FLAGS += +scoreboard_enabled=0
+ALL_SIMV_UVM_FLAGS += +tandem_enabled=0
+ALL_XRUN_SIMV_UVM_FLAGS += +tandem_enabled=0
 endif
 
 ### VCS UVM rules

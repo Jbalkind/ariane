@@ -49,13 +49,22 @@ function st_core_cntrl_cfg cva6pkg_to_core_cntrl_cfg(st_core_cntrl_cfg cfg);
     cfg.disable_all_csr_checks = 0;
     cfg.mode_s_supported = CVA6Cfg.RVS;
     cfg.mode_u_supported = CVA6Cfg.RVU;
+    cfg.mode_h_supported = CVA6Cfg.RVH;
 
     cfg.pmp_supported = (CVA6Cfg.NrPMPEntries > 0);
     cfg.pmp_regions = CVA6Cfg.NrPMPEntries;
     cfg.debug_supported = CVA6Cfg.DebugEn;
 
+    cfg.DirectVecOnly = CVA6Cfg.DirectVecOnly;
+    cfg.TvalEn = CVA6Cfg.TvalEn;
+
     cfg.unsupported_csr_mask['h643] = 1; // HTVAL
     cfg.unsupported_csr_mask['h64A] = 1; // HTINST
+
+    if (!cfg.mode_h_supported) begin
+      cfg.unsupported_csr_mask['h34A] = 1; // MTINST
+      cfg.unsupported_csr_mask['h34B] = 1; // MTVAL2
+    end
 
     // Disable comparison
     cfg.unsupported_csr_mask['h7C0] = 1; // ICACHE
@@ -72,12 +81,21 @@ function st_core_cntrl_cfg cva6pkg_to_core_cntrl_cfg(st_core_cntrl_cfg cfg);
     void'(spike_set_param_str(base, "extensions", "cv32a60x"));
 
     // All enabled except XS and TW bits
-    void'(spike_set_param_uint64_t(base, "mstatus_write_mask", 'hFDFE_7FFF));
+    void'(spike_set_param_uint64_t(base, "mstatus_write_mask", 'hFFDE_7FFF));
+
+    if (cfg.DirectVecOnly) begin
+      void'(spike_set_param_uint64_t(base, "mtvec_write_mask", 32'hFFFF_FFFC));
+    end
 
     void'(spike_set_param_uint64_t(base, "misa_override_value", get_misa(cfg)));
     void'(spike_set_param_uint64_t(base, "misa_override_mask", 64'h0FFF_FFFF));
     void'(spike_set_param_bool    (base, "misa_we_enable", 1'b1));
     void'(spike_set_param_bool    (base, "misa_we", 1'b0));
+
+    if (!cfg.TvalEn) begin
+      void'(spike_set_param_bool    (base, "mtval_we_enable", 1'b1));
+      void'(spike_set_param_bool    (base, "mtval_we", 1'b0));
+    end
 
     return cfg;
 

@@ -48,8 +48,6 @@ package cva6_config_pkg;
 
   localparam CVA6ConfigWtDcacheWbufDepth = 8;
 
-  localparam CVA6ConfigSuperscalarEn = 0;
-  localparam CVA6ConfigNrCommitPorts = 2;
   localparam CVA6ConfigNrScoreboardEntries = 8;
 
   localparam CVA6ConfigFpgaEn = 0;
@@ -78,7 +76,8 @@ package cva6_config_pkg;
       XLEN: unsigned'(CVA6ConfigXlen),
       FpgaEn: bit'(CVA6ConfigFpgaEn),
       TechnoCut: bit'(0),
-      NrCommitPorts: unsigned'(CVA6ConfigNrCommitPorts),
+      SuperscalarEn: bit'(0),
+      NrCommitPorts: unsigned'(2),
       AxiAddrWidth: unsigned'(CVA6ConfigAxiAddrWidth),
       AxiDataWidth: unsigned'(CVA6ConfigAxiDataWidth),
       AxiIdWidth: unsigned'(CVA6ConfigAxiIdWidth),
@@ -116,9 +115,9 @@ package cva6_config_pkg;
       TvalEn: bit'(CVA6ConfigTvalEn),
       DirectVecOnly: bit'(0),
       NrPMPEntries: unsigned'(CVA6ConfigNrPMPEntries),
-      PMPCfgRstVal: {16{64'h0}},
-      PMPAddrRstVal: {16{64'h0}},
-      PMPEntryReadOnly: 16'd0,
+      PMPCfgRstVal: {64{64'h0}},
+      PMPAddrRstVal: {64{64'h0}},
+      PMPEntryReadOnly: 64'd0,
       NOCType: config_pkg::NOC_TYPE_L15_BIG_ENDIAN,
       NrNonIdempotentRules: unsigned'(2),
       NonIdempotentAddrBase: 1024'({64'b0, 64'b0}),

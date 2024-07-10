@@ -38,6 +38,7 @@ core/cvxif_example/include/cvxif_instr_pkg.sv
 core/acc_dispatcher.sv
 corev_apu/rv_plic/rtl/rv_plic_reg_pkg.sv
 common/local/util/sram.sv
+common/local/util/sram_cache.sv
 vendor/pulp-platform/common_cells/src/deprecated/rrarbiter.sv
 vendor/pulp-platform/common_cells/src/deprecated/fifo_v1.sv
 vendor/pulp-platform/common_cells/src/deprecated/fifo_v2.sv

@@ -273,7 +273,9 @@ module cva6_icache
             state_d = IDLE;
             // we have a hit or an exception output valid result
           end else if (((|cl_hit && cache_en_q) || areq_i.fetch_exception.valid) && !inv_q) begin
-            dreq_o.valid = ~dreq_i.kill_s2;  // just don't output in this case
+            // Exceptions must always be signaled - they cannot be retried.
+            // Killed hits can be silently dropped since they will be re-fetched.
+            dreq_o.valid = ~dreq_i.kill_s2 | areq_i.fetch_exception.valid;
             state_d      = IDLE;
 
             // we can accept another request
@@ -336,6 +338,12 @@ module cva6_icache
       KILL_ATRANS: begin
         areq_o.fetch_req = '1;
         if (areq_i.fetch_valid) begin
+          // Propagate exceptions even when the request was killed.
+          // Without this, exceptions (e.g., page faults) would be lost,
+          // causing an infinite retry loop and system freeze.
+          if (areq_i.fetch_exception.valid) begin
+            dreq_o.valid = 1'b1;
+          end
           state_d = IDLE;
         end
       end

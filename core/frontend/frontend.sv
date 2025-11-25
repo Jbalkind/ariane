@@ -564,6 +564,16 @@ module frontend
     );
   end
 
+  // Bug fix: Ensure exceptions are propagated even when the realigner can't complete
+  // an unaligned instruction. When the realigner outputs valid_o='0 for an unaligned
+  // 32-bit instruction fetch, but the icache returned with an exception, the exception
+  // would be lost because nothing is pushed to the instruction queue. Force at least
+  // instruction slot 0 to be valid when there's an exception so it can propagate.
+  logic [CVA6Cfg.INSTR_PER_FETCH-1:0] instruction_valid_with_ex;
+  assign instruction_valid_with_ex = instruction_valid |
+      ((icache_ex_valid_q != ariane_pkg::FE_NONE && icache_valid_q) ?
+       {{CVA6Cfg.INSTR_PER_FETCH-1{1'b0}}, 1'b1} : '0);
+
   instr_queue #(
       .CVA6Cfg(CVA6Cfg),
       .fetch_entry_t(fetch_entry_t)
@@ -580,7 +590,7 @@ module frontend
       .exception_gva_i    (icache_gva_q),
       .predict_address_i  (predict_address),
       .cf_type_i          (cf_type),
-      .valid_i            (instruction_valid),     // from re-aligner
+      .valid_i            (instruction_valid_with_ex),  // use exception-aware valid
       .consumed_o         (instr_queue_consumed),
       .ready_o            (instr_queue_ready),
       .replay_o           (replay),
